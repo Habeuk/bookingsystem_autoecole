@@ -1,7 +1,7 @@
 bookingsystem_autoecole.page.app:
   path: '/bookingsystem-autoecole/page-app'
   defaults:
-    _title: 'Example'
+    _title: 'Reserver des creneaux'
     _controller: '\Drupal\bookingsystem_autoecole\Controller\BookingsystemAutoecoleController::build'
   requirements:
     _permission: 'access content'
