@@ -10,5 +10,7 @@
         }
     ],
     "minimum-stability": "dev",
-    "require": {}
+    "require": {
+    	"habeuk/booking_system": "dev-2x|^2.0"
+    }
 }
