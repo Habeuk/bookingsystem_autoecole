@@ -1,5 +1,6 @@
 {
-    "name": "stephane/bookingsystem_autoecole",
+    "name": "habeuk/bookingsystem_autoecole",
+    "description": "module de reservation pour auto ecole",
     "type": "drupal-custom-module",
     "license": "MIT",
     "authors": [
@@ -9,7 +10,5 @@
         }
     ],
     "minimum-stability": "dev",
-    "require": {
-    	"habeuk/booking_system": "dev-2x|^2.0"
-    }
+    "require": {}
 }
