@@ -1,0 +1,15 @@
+{
+    "name": "stephane/bookingsystem_autoecole",
+    "type": "drupal-custom-module",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "kouwa stephane",
+            "email": "kksasteph888@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+    	"habeuk/booking_system": "dev-2x|^2.0"
+    }
+}

@@ -1,0 +1,60 @@
+bookingsystem_autoecole.page.app:
+  path: '/bookingsystem-autoecole/page-app'
+  defaults:
+    _title: 'Example'
+    _controller: '\Drupal\bookingsystem_autoecole\Controller\BookingsystemAutoecoleController::build'
+  requirements:
+    _permission: 'access content'
+    
+bookingsystem_autoecole.config.default:
+  path: '/admin/bookingsystem-autoecole/configure-default'
+  defaults:
+    _title: 'Configure default'
+    _controller: '\Drupal\bookingsystem_autoecole\Controller\BookingsystemAutoecoleController::ConfigureDefault'
+  requirements:
+    _role: 'gerant_de_site_web+administrator'
+
+bookingsystem_autoecole.settings_form:
+  path: '/admin/config/system/bookingsystem-autoecole'
+  defaults:
+    _title: 'bookingsystem_autoecole settings'
+    _form: 'Drupal\bookingsystem_autoecole\Form\SettingsForm'
+  requirements:
+    _permission: 'administer bookingsystem_autoecole configuration'
+
+bookingsystem_autoecole.config_resume:
+  path: "/admin/bookingsystem-autoecole/config-resume/{booking_config_type_id}"
+  defaults:
+    _title: "Config resume"
+    _controller: '\Drupal\bookingsystem_autoecole\Controller\BSAutoEcoleConfigResumeController::ConfigResume'
+  requirements:
+    _role: 'gerant_de_site_web+administrator'
+    
+bookingsystem_autoecole.app_load_config_calendar:
+  path: "/booking-system-auto/views-app-calendar"
+  defaults:
+    _title: "Load config calendar"
+    _controller: '\Drupal\bookingsystem_autoecole\Controller\BookingSystemUseApp::loadConfigCalandar'
+  requirements:
+    _permission: "access content"
+  methods: [GET]
+  options:
+      _auth: ['basic_auth', 'cookie']
+      
+bookingsystem_autoecole.app_load_creneaux:
+  path: "/booking-system-auto/views-app-creneaux/{booking_config_type_id}/{date}"
+  defaults:
+    _title: "Load configs creneaux"
+    _controller: '\Drupal\bookingsystem_autoecole\Controller\BookingSystemUseApp::loadConfisCreneaux'
+    date: null
+  requirements:
+    _permission: "access content"
+  methods: [GET]
+  options:
+      _auth: ['basic_auth', 'cookie']
+      
+
+
+      
+
+      

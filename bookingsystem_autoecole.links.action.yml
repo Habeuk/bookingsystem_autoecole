@@ -1,0 +1,5 @@
+entity.bks_autoecole_heures.add_form:
+  route_name: entity.bks_autoecole_heures.add_page
+  title: 'Add Bks autoecole heures'
+  appears_on:
+    - entity.bks_autoecole_heures.collection

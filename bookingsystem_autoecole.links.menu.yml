@@ -1,0 +1,15 @@
+bookingsystem_autoecole.settings_form:
+  title: 'bookingsystem_autoecole'
+  description: 'Configure bookingsystem_autoecole.'
+  parent: system.admin_config_system
+  route_name: bookingsystem_autoecole.settings_form
+  weight: 10
+
+# Bks autoecole heures menu items definition
+entity.bks_autoecole_heures.collection:
+  title: 'Bks autoecole heures list'
+  route_name: entity.bks_autoecole_heures.collection
+  description: 'List Bks autoecole heures entities'
+  parent: system.admin_structure
+  weight: 100
+

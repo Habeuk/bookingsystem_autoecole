@@ -1,0 +1,8 @@
+name: bookingsystem_autoecole
+type: module
+description: Allows you to extend the functionality of the booking system so that it can work with reservations by hours
+package: Custom
+core_version_requirement: ^9 || ^10
+dependencies:
+  - booking_system
+  - lesroidelareno

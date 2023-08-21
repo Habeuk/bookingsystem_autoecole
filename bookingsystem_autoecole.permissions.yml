@@ -1,0 +1,35 @@
+administer bookingsystem_autoecole configuration:
+  title: 'Administer bookingsystem_autoecole configuration'
+  description: 'Optional description.'
+  restrict access: true
+add bks autoecole heures entities:
+  title: 'Create new Bks autoecole heures entities'
+
+administer bks autoecole heures entities:
+  title: 'Administer Bks autoecole heures entities'
+  description: 'Allow to access the administration form to configure Bks autoecole heures entities.'
+  restrict access: true
+
+delete bks autoecole heures entities:
+  title: 'Delete Bks autoecole heures entities'
+
+edit bks autoecole heures entities:
+  title: 'Edit Bks autoecole heures entities'
+
+view published bks autoecole heures entities:
+  title: 'View published Bks autoecole heures entities'
+
+view unpublished bks autoecole heures entities:
+  title: 'View unpublished Bks autoecole heures entities'
+
+view all bks autoecole heures revisions:
+  title: 'View all Bks autoecole heures revisions'
+
+revert all bks autoecole heures revisions:
+  title: 'Revert all Bks autoecole heures revisions'
+  description: 'Role requires permission <em>view Bks autoecole heures revisions</em> and <em>edit rights</em> for bks autoecole heures entities in question or <em>administer bks autoecole heures entities</em>.'
+
+delete all bks autoecole heures revisions:
+  title: 'Delete all revisions'
+  description: 'Role requires permission to <em>view Bks autoecole heures revisions</em> and <em>delete rights</em> for bks autoecole heures entities in question or <em>administer bks autoecole heures entities</em>.'
+

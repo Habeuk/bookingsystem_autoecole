@@ -1,0 +1,13 @@
+services:
+  bookingsystem_autoecole.event_subscriber:
+    class: Drupal\bookingsystem_autoecole\EventSubscriber\BookingsystemAutoecoleSubscriber
+    arguments: ['@messenger']
+    tags:
+      - { name: event_subscriber }
+  bookingsystem_autoecole.app_manager_creneaux:
+    class: Drupal\bookingsystem_autoecole\Services\ManagerCreneauxAuto
+    arguments: ['@current_user', '@entity_type.manager','@booking_system.dates_hours_disabled']
+    
+  bookingsystem_autoecole.app_manager_date:
+    class: Drupal\bookingsystem_autoecole\Services\ManagerDateAuto
+    arguments: ['@current_user', '@entity_type.manager','@booking_system.dates_hours_disabled','@bookingsystem_autoecole.app_manager_creneaux']

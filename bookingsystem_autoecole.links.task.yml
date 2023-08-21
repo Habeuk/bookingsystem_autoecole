@@ -1,0 +1,21 @@
+# Bks autoecole heures routing definition
+entity.bks_autoecole_heures.canonical:
+  route_name: entity.bks_autoecole_heures.canonical
+  base_route: entity.bks_autoecole_heures.canonical
+  title: 'View'
+
+entity.bks_autoecole_heures.edit_form:
+  route_name: entity.bks_autoecole_heures.edit_form
+  base_route: entity.bks_autoecole_heures.canonical
+  title: 'Edit'
+
+entity.bks_autoecole_heures.version_history:
+  route_name: entity.bks_autoecole_heures.version_history
+  base_route: entity.bks_autoecole_heures.canonical
+  title: 'Revisions'
+
+entity.bks_autoecole_heures.delete_form:
+  route_name:  entity.bks_autoecole_heures.delete_form
+  base_route:  entity.bks_autoecole_heures.canonical
+  title: Delete
+  weight: 10
