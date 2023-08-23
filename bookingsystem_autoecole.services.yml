@@ -4,6 +4,11 @@ services:
     arguments: ['@messenger']
     tags:
       - { name: event_subscriber }
+  bookingsystem_autoecole.order_paid:
+    class: Drupal\bookingsystem_autoecole\EventSubscriber\AfterOrderPaid
+    arguments: ['@entity_type.manager','@messenger']
+    tags:
+      - { name: event_subscriber }
   bookingsystem_autoecole.app_manager_creneaux:
     class: Drupal\bookingsystem_autoecole\Services\ManagerCreneauxAuto
     arguments: ['@current_user', '@entity_type.manager','@booking_system.dates_hours_disabled']
