@@ -58,7 +58,6 @@ class AfterOrderPaid implements EventSubscriberInterface {
        * @var \Drupal\commerce_product\Entity\ProductVariation $entityPurchase
        */
       $entityPurchase = $item->getPurchasedEntity();
-      $this->messenger->addMessage(" getEntityTypeId : " . $item->getPurchasedEntityId());
       
       if ($entityPurchase && $entityPurchase->bundle() == 'forfait_heure') {
         if ($entityPurchase->hasField('field_hours')) {
@@ -84,7 +83,7 @@ class AfterOrderPaid implements EventSubscriberInterface {
        */
       $bks_autoecole_heures = $this->entityTypeManger->getStorage('bks_autoecole_heures')->create($values);
       $bks_autoecole_heures->save();
-      $this->messenger->addMessage("Vous bénéficiez de : " . $hours . " heures");
+      $this->messenger->addMessage("Vous bénéficiez de : " . $hours . " heure(s)");
     }
   }
   
