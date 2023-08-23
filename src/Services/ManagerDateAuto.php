@@ -2,11 +2,7 @@
 
 namespace Drupal\bookingsystem_autoecole\Services;
 
-use Drupal\Core\Entity\EntityTypeManager;
-use Drupal\Core\Session\AccountInterface;
-use Drupal\booking_system\Entity\BookingConfigType;
-use Drupal\booking_system\Exception\BookingSystemException;
-use Drupal\Core\Datetime\DrupalDateTime;
+use Drupal\booking_system\Entity\BookingReservation;
 use Drupal\booking_system\Services\BookingManager\ManagerDate;
 
 /**
@@ -36,6 +32,38 @@ class ManagerDateAuto extends ManagerDate {
     else {
       $results['access'] = false;
       $results['ban_reason'] = " Vous devez acheter des heures afin de pouvoir selectionner les creneaux ";
+    }
+  }
+  
+  /**
+   * Prepare le contenu du mail à envoyer à l'utilisateur.
+   *
+   * @param BookingReservation $reservation
+   */
+  protected function prepareMailToUser(BookingReservation $reservation) {
+    $email = \Drupal::currentUser()->getEmail();
+    $creneaux = $reservation->getCreneauxReatable();
+    if ($email && $creneaux) {
+      $subject = "Reservation of a slot";
+      $messages = [
+        '#type' => 'html_tag',
+        '#tag' => 'h2',
+        '#value' => 'You have booked a slot'
+      ];
+      if (count($creneaux) > 1) {
+        $subject = "Reservation of slots";
+        $messages = [
+          '#type' => 'html_tag',
+          '#tag' => 'h2',
+          '#value' => 'You have booked slots'
+        ];
+      }
+      $messages[] = $creneaux;
+      $this->sendMails($email, $subject, [
+        '#theme' => 'wbh_php_mailer_plugin_mail',
+        '#description' => $messages,
+        '#footer' => 'Run at : ' . time()
+      ]);
     }
   }
   
