@@ -8,6 +8,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Stephane888\DrupalUtility\HttpResponse;
 use Stephane888\Debug\ExceptionExtractMessage;
 use Drupal\lesroidelareno\lesroidelareno;
+use Drupal\Component\Serialization\Json;
 use Drupal\bookingsystem_autoecole\Services\ManagerCreneauxAuto;
 use Drupal\bookingsystem_autoecole\Services\ManagerDateAuto;
 
@@ -73,6 +74,25 @@ class BookingSystemUseApp extends ControllerBase {
   public function loadConfisCreneaux($booking_config_type_id, $date) {
     try {
       $configs = $this->ManagerCreneaux->loadCreneaux($booking_config_type_id, $date);
+      return HttpResponse::response($configs);
+    }
+    catch (\Exception $e) {
+      return HttpResponse::response(ExceptionExtractMessage::errorAll($e), 435);
+    }
+    catch (\Error $e) {
+      return HttpResponse::response(ExceptionExtractMessage::errorAll($e), 435);
+    }
+  }
+  
+  /**
+   * Enregistrer un creneau.
+   *
+   * @param string $booking_config_type_id
+   */
+  public function SaveReservation(Request $Request, string $booking_config_type_id) {
+    try {
+      $values = Json::decode($Request->getContent());
+      $configs = $this->BookingMangerDate->saveCreneaux($booking_config_type_id, $values);
       return HttpResponse::response($configs);
     }
     catch (\Exception $e) {

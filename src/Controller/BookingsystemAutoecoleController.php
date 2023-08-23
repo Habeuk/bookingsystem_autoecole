@@ -41,7 +41,7 @@ class BookingsystemAutoecoleController extends ControllerBase {
       'booking_config_type_id' => $booking_config_type_id,
       'date' => null
     ]);
-    $urlSave = Url::fromRoute("booking_system.save_reservation", [
+    $urlSave = Url::fromRoute("bookingsystem_autoecole.save_reservation", [
       'booking_config_type_id' => $booking_config_type_id
     ]);
     $build['content'] = [
