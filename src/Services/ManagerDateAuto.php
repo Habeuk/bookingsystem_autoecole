@@ -62,7 +62,7 @@ class ManagerDateAuto extends ManagerDate {
       $this->sendMails($email, $subject, [
         '#theme' => 'wbh_php_mailer_plugin_mail',
         '#description' => $messages,
-        '#footer' => 'Run at : ' . time()
+        '#footer' => "Copyright © Wb-Horizon - 2022"
       ]);
     }
   }
