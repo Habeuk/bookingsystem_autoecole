@@ -45,20 +45,20 @@ class ManagerDateAuto extends ManagerDate {
     $creneaux = $reservation->getCreneauxReatable();
     if ($email && $creneaux) {
       $subject = "Reservation of a slot";
-      $messages = [
+      $messages['titre'] = [
         '#type' => 'html_tag',
         '#tag' => 'h2',
         '#value' => 'You have booked a slot'
       ];
       if (count($creneaux) > 1) {
         $subject = "Reservation of slots";
-        $messages = [
+        $messages['titre'] = [
           '#type' => 'html_tag',
           '#tag' => 'h2',
           '#value' => 'You have booked slots'
         ];
       }
-      $messages[] = $creneaux;
+      $messages['creneaux'] = $creneaux;
       $this->sendMails($email, $subject, [
         '#theme' => 'wbh_php_mailer_plugin_mail',
         '#description' => $messages,
