@@ -83,7 +83,7 @@ class AfterOrderPaid implements EventSubscriberInterface {
        * @var \Drupal\bookingsystem_autoecole\Entity\BksAutoecoleHeures $bks_autoecole_heures
        */
       $bks_autoecole_heures = $this->entityTypeManger->getStorage('bks_autoecole_heures')->create($values);
-      $bks_autoecole_heures->saves();
+      $bks_autoecole_heures->save();
       $this->messenger->addMessage("Vous bénéficiez de : " . $hours . " heures");
     }
   }
