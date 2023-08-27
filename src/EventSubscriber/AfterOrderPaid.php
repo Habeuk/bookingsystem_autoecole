@@ -59,7 +59,7 @@ class AfterOrderPaid implements EventSubscriberInterface {
        */
       $entityPurchase = $item->getPurchasedEntity();
       //
-      if ($entityPurchase && ($entityPurchase->bundle() == 'forfait_heure' && $entityPurchase->bundle() == 'forfait_heure')) {
+      if ($entityPurchase && ($entityPurchase->bundle() == 'forfait_heure' || $entityPurchase->bundle() == 'service_auto_ecole')) {
         if ($entityPurchase->hasField('field_hours')) {
           $qty = (int) $item->getQuantity();
           $hours += $qty * $entityPurchase->get('field_hours')->value;
