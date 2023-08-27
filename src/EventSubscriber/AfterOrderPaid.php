@@ -58,8 +58,8 @@ class AfterOrderPaid implements EventSubscriberInterface {
        * @var \Drupal\commerce_product\Entity\ProductVariation $entityPurchase
        */
       $entityPurchase = $item->getPurchasedEntity();
-      
-      if ($entityPurchase && $entityPurchase->bundle() == 'forfait_heure') {
+      //
+      if ($entityPurchase && ($entityPurchase->bundle() == 'forfait_heure' && $entityPurchase->bundle() == 'forfait_heure')) {
         if ($entityPurchase->hasField('field_hours')) {
           $qty = (int) $item->getQuantity();
           $hours += $qty * $entityPurchase->get('field_hours')->value;
@@ -74,7 +74,7 @@ class AfterOrderPaid implements EventSubscriberInterface {
         'source' => 'order',
         'user_id' => $uid,
         'owner_heures_id' => $uid,
-        'heures' => $hours,
+        'creneaux_live' => $hours,
         'commerce_order' => $order->id()
       ];
       /**

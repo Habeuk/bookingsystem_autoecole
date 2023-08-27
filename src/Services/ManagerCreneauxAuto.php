@@ -18,12 +18,19 @@ use Drupal\lesroidelareno\lesroidelareno;
 class ManagerCreneauxAuto extends ManagerCreneaux {
   
   /**
+   * Contient le nombre d'heure de l'utilisateur.
+   *
+   * @var int
+   */
+  private $hours = null;
+  
+  /**
    *
    * {@inheritdoc}
    * @see \Drupal\booking_system\Services\BookingManager\ManagerCreneaux::getLimitReservation()
    */
-  public function getLimitReservation($values) {
-    $limit = parent::getLimitReservation($values);
+  public function getLimitReservation() {
+    $limit = parent::getLimitReservation();
     $hours = $this->getHoursByUser();
     if ($limit > 0 && $hours > 0) {
       if ($hours > $limit) {
@@ -40,20 +47,23 @@ class ManagerCreneauxAuto extends ManagerCreneaux {
    * Recupere le nombre d'heure restant par utilisateur.
    */
   public function getHoursByUser() {
-    $hours = 0;
-    $entities = $this->entityTypeManager->getStorage('bks_autoecole_heures')->loadByProperties([
-      'owner_heures_id' => lesroidelareno::getCurrentUserId()
-    ]);
-    if ($entities) {
-      foreach ($entities as $entity) {
-        /**
-         *
-         * @var \Drupal\bookingsystem_autoecole\Entity\BksAutoecoleHeures $entity
-         */
-        $hours += $entity->getHours();
+    if ($this->hours === NULL) {
+      $hours = 0;
+      $entities = $this->entityTypeManager->getStorage('bks_autoecole_heures')->loadByProperties([
+        'owner_heures_id' => lesroidelareno::getCurrentUserId()
+      ]);
+      if ($entities) {
+        foreach ($entities as $entity) {
+          /**
+           *
+           * @var \Drupal\bookingsystem_autoecole\Entity\BksAutoecoleHeures $entity
+           */
+          $hours += $entity->getCreneauxLive();
+        }
       }
+      $this->hours = $hours;
     }
-    return $hours;
+    return $this->hours;
   }
   
 }

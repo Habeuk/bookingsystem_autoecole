@@ -53,8 +53,7 @@ class BookingsystemAutoecoleController extends ControllerBase {
         'data-url-creneaux' => '/' . $urlCreneaux->getInternalPath(),
         'data-url-save' => '/' . $urlSave->getInternalPath(),
         'class' => [
-          'm-5',
-          'p-5'
+          'p-md-5'
         ]
       ]
     ];

@@ -93,6 +93,8 @@ class BookingSystemUseApp extends ControllerBase {
     try {
       $values = Json::decode($Request->getContent());
       $configs = $this->BookingMangerDate->saveCreneaux($booking_config_type_id, $values);
+      $this->BookingMangerDate->retrancheLesHeures($values);
+      //
       return HttpResponse::response($configs);
     }
     catch (\Exception $e) {

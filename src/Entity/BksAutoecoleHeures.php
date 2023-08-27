@@ -202,8 +202,24 @@ class BksAutoecoleHeures extends EditorialContentEntityBase implements BksAutoec
     return $this;
   }
   
-  public function getHours() {
-    return (int) $this->get('heures')->value;
+  /**
+   * Retourne le nombre de creneaux restant.
+   *
+   * @return number
+   */
+  public function getCreneauxLive() {
+    return (int) $this->get('creneaux_live')->value;
+  }
+  
+  /**
+   * set creneaux_live
+   *
+   * @param int $nbre_creneaux
+   * @return \Drupal\bookingsystem_autoecole\Entity\BksAutoecoleHeures
+   */
+  public function setCreneauxLive(int $nbre_creneaux) {
+    $this->set('creneaux_live', $nbre_creneaux);
+    return $this;
   }
   
   /**
@@ -267,9 +283,12 @@ class BksAutoecoleHeures extends EditorialContentEntityBase implements BksAutoec
       ]
     ])->setDisplayConfigurable('form', TRUE)->setDisplayConfigurable('view', TRUE)->setRequired(TRUE);
     
-    $fields['heures'] = BaseFieldDefinition::create('integer')->setLabel(t('Number of hours remaining'))->setRevisionable(TRUE)->setSettings([
+    /**
+     * Represente le nombre de creneau restants.
+     */
+    $fields['creneaux_live'] = BaseFieldDefinition::create('integer')->setLabel(t('Number of creneaux remaining'))->setRevisionable(TRUE)->setSettings([
       'min' => 0,
-      'suffix' => t('hour(s)')
+      'suffix' => t('creneau(x)')
     ])->setDefaultValue('')->setDisplayOptions('view', [
       'type' => 'number_integer'
     ])->setDisplayOptions('form', [
