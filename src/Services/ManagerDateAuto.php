@@ -75,18 +75,18 @@ class ManagerDateAuto extends ManagerDate {
     $email = \Drupal::currentUser()->getEmail();
     $creneaux = $reservation->getCreneauxReatable();
     if ($email && $creneaux) {
-      $subject = "Reservation of a slot";
+      $subject = t("Reservation of a slot");
       $messages['titre'] = [
         '#type' => 'html_tag',
         '#tag' => 'h2',
-        '#value' => 'You have booked a slot'
+        '#value' => t('You have booked a slot')
       ];
       if (count($creneaux) > 1) {
-        $subject = "Reservation of slots";
+        $subject = t("Reservation of slots");
         $messages['titre'] = [
           '#type' => 'html_tag',
           '#tag' => 'h2',
-          '#value' => 'You have booked slots'
+          '#value' => t('You have booked slots')
         ];
       }
       $messages['creneaux'] = $creneaux;
