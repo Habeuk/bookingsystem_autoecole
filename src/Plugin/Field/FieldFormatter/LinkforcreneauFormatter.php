@@ -121,6 +121,23 @@ class LinkforcreneauFormatter extends FormatterBase {
               '#value' => $this->getSetting('empty_hours')
             ]
           ];
+          
+          foreach ($items as $delta => $item) {
+            $element[] = [
+              '#type' => 'link',
+              '#title' => $item->title,
+              '#options' => [
+                'attributes' => [
+                  'class' => [
+                    'btn',
+                    'btn-primary',
+                    'disabled'
+                  ]
+                ]
+              ],
+              '#url' => Url::fromUserInput('#')
+            ];
+          }
         }
       }
       else {
@@ -152,6 +169,22 @@ class LinkforcreneauFormatter extends FormatterBase {
             '#value' => $this->getSetting('no_login')
           ]
         ];
+        foreach ($items as $delta => $item) {
+          $element[] = [
+            '#type' => 'link',
+            '#title' => $item->title,
+            '#options' => [
+              'attributes' => [
+                'class' => [
+                  'btn',
+                  'btn-primary',
+                  'disabled'
+                ]
+              ]
+            ],
+            '#url' => Url::fromUserInput('#')
+          ];
+        }
         // $element[] = [
         // '#type' => 'link',
         // '#title' => 'Inscription',
