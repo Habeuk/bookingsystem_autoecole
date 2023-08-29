@@ -43,6 +43,13 @@ class ManagerCreneauxAuto extends ManagerCreneaux {
     return 0;
   }
   
+  public function buildCreneaux($date_string) {
+    $results = parent::buildCreneaux($date_string);
+    // on ajoute les paramettres specifique à ce sous module.
+    $results['hours'] = $this->getHoursByUser();
+    return $results;
+  }
+  
   /**
    * Recupere le nombre d'heure restant par utilisateur.
    */
