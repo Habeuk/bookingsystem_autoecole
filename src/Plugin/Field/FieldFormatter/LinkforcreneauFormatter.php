@@ -84,7 +84,8 @@ class LinkforcreneauFormatter extends FormatterBase {
                 'attributes' => [
                   'class' => [
                     'btn',
-                    'btn-primary'
+                    'btn-primary',
+                    'd-block'
                   ]
                 ]
               ]
@@ -131,7 +132,8 @@ class LinkforcreneauFormatter extends FormatterBase {
                   'class' => [
                     'btn',
                     'btn-primary',
-                    'disabled'
+                    'disabled',
+                    'd-block'
                   ]
                 ]
               ],
@@ -178,7 +180,8 @@ class LinkforcreneauFormatter extends FormatterBase {
                 'class' => [
                   'btn',
                   'btn-primary',
-                  'disabled'
+                  'disabled',
+                  'd-block'
                 ]
               ]
             ],
