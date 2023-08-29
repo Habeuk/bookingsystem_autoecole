@@ -6,3 +6,11 @@ bookingsystem_autoecole.settings:
     example:
       type: string
       label: 'Example'
+      
+field.formatter.settings.bookingsystem_autoecole_linkforcreneau:
+  type: mapping
+  label: LinkForCreneau formatter settings
+  mapping:
+    foo:
+      type: string
+      label: Foo

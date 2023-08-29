@@ -50,7 +50,8 @@ class ManagerCreneauxAuto extends ManagerCreneaux {
     if ($this->hours === NULL) {
       $hours = 0;
       $entities = $this->entityTypeManager->getStorage('bks_autoecole_heures')->loadByProperties([
-        'owner_heures_id' => lesroidelareno::getCurrentUserId()
+        'owner_heures_id' => lesroidelareno::getCurrentUserId(),
+        \Drupal\domain_access\DomainAccessManagerInterface::DOMAIN_ACCESS_FIELD => lesroidelareno::getCurrentDomainId()
       ]);
       if ($entities) {
         foreach ($entities as $entity) {
