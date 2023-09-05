@@ -60,7 +60,7 @@ bookingsystem_autoecole.app_load_config_calendar:
       _auth: ['basic_auth', 'cookie']
       
 bookingsystem_autoecole.app_load_creneaux:
-  path: "/booking-system-auto/views-app-creneaux/{booking_config_type_id}/{date}"
+  path: "/booking-system-auto/views-app-creneaux/{booking_config_type_id}/{type_boite}/{date}"
   defaults:
     _title: "Load configs creneaux"
     _controller: '\Drupal\bookingsystem_autoecole\Controller\BookingSystemUseApp::loadConfisCreneaux'

@@ -71,8 +71,9 @@ class BookingSystemUseApp extends ControllerBase {
    * @param string $date
    * @return \Symfony\Component\HttpFoundation\JsonResponse
    */
-  public function loadConfisCreneaux($booking_config_type_id, $date) {
+  public function loadConfisCreneaux($booking_config_type_id, $date, $type_boite) {
     try {
+      $this->ManagerCreneaux->type_boite = $type_boite;
       $configs = $this->ManagerCreneaux->loadCreneaux($booking_config_type_id, $date);
       return HttpResponse::response($configs);
     }

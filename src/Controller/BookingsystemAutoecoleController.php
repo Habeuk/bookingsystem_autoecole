@@ -33,6 +33,7 @@ class BookingsystemAutoecoleController extends ControllerBase {
     $urlCalendar = Url::fromRoute("bookingsystem_autoecole.app_load_config_calendar");
     $urlCreneaux = Url::fromRoute("bookingsystem_autoecole.app_load_creneaux", [
       'booking_config_type_id' => $booking_config_type_id,
+      'type_boite' => $type_boite,
       'date' => null
     ]);
     $urlSave = Url::fromRoute("bookingsystem_autoecole.save_reservation", [

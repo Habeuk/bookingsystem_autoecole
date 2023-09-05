@@ -23,6 +23,12 @@ class ManagerCreneauxAuto extends ManagerCreneaux {
    * @var int
    */
   private $hours = null;
+  /**
+   * Permet de selectionner le type de boite de transmission.
+   *
+   * @var string
+   */
+  public $type_boite = 'manuelle';
   
   /**
    *
@@ -43,10 +49,10 @@ class ManagerCreneauxAuto extends ManagerCreneaux {
     return 0;
   }
   
-  public function buildCreneaux($date_string, $type_boite) {
+  protected function buildCreneaux($date_string) {
     $results = parent::buildCreneaux($date_string);
     // On ajoute les paramettres specifique à ce sous module.
-    $results['hours'] = $this->getHoursByUser($type_boite);
+    $results['hours'] = $this->getHoursByUser();
     return $results;
   }
   
@@ -54,8 +60,10 @@ class ManagerCreneauxAuto extends ManagerCreneaux {
    * Recupere le nombre d'heure restant par utilisateur en fonction du type de
    * conduite.
    */
-  public function getHoursByUser($type_boite = 'manuelle') {
+  public function getHoursByUser($type_boite = NULL, $cache = true) {
     if ($this->hours === NULL) {
+      if ($type_boite === NULL)
+        $type_boite = $this->type_boite;
       $hours = 0;
       $entities = $this->entityTypeManager->getStorage('bks_autoecole_heures')->loadByProperties([
         'owner_heures_id' => lesroidelareno::getCurrentUserId(),
@@ -70,6 +78,9 @@ class ManagerCreneauxAuto extends ManagerCreneaux {
            */
           $hours += $entity->getCreneauxLive();
         }
+      }
+      if (!$cache) {
+        return $hours;
       }
       $this->hours = $hours;
     }

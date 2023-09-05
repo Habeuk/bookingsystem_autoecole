@@ -73,21 +73,20 @@ class LinkforcreneauFormatter extends FormatterBase {
          * @var \Drupal\bookingsystem_autoecole\Services\ManagerCreneauxAuto $manager_creneaux
          */
         $manager_creneaux = \Drupal::service("bookingsystem_autoecole.app_manager_creneaux");
-        $hours_manuel = $manager_creneaux->getHoursByUser('manuelle');
-        $hours_auto = $manager_creneaux->getHoursByUser('automatique');
-        
+        $hours_manuel = $manager_creneaux->getHoursByUser('manuelle', false);
+        $hours_auto = $manager_creneaux->getHoursByUser('automatique', false);
         if ($hours_manuel > 0 || $hours_auto > 0) {
-          $addSuffix = false;
-          if ($hours_auto > 0 && $hours_manuel > 0)
-            $addSuffix = true;
           if ($hours_auto > 0) {
             $url = Url::fromRoute($routeName, [
               'type_boite' => 'automatique'
             ]);
+            $suffix = '';
+            if ($hours_auto > 0 && $hours_manuel > 0)
+              $suffix = "( Boite automatique )";
             foreach ($items as $delta => $item) {
               $element[$delta] = [
                 '#type' => 'link',
-                '#title' => $item->title . $addSuffix ? "( Boite automatique )" : '',
+                '#title' => $item->title . $suffix,
                 '#options' => [
                   'attributes' => [
                     'class' => [
@@ -102,13 +101,16 @@ class LinkforcreneauFormatter extends FormatterBase {
             }
           }
           if ($hours_manuel > 0) {
+            $suffix = '';
+            if ($hours_auto > 0 && $hours_manuel > 0)
+              $suffix = "( Boite manuelle )";
             $url = Url::fromRoute($routeName, [
               'type_boite' => 'manuelle'
             ]);
             foreach ($items as $delta => $item) {
               $element[$delta] = [
                 '#type' => 'link',
-                '#title' => $item->title . $addSuffix ? "( Boite manuelle )" : '',
+                '#title' => $item->title . $suffix,
                 '#options' => [
                   'attributes' => [
                     'class' => [
