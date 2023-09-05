@@ -16,14 +16,8 @@ class BookingsystemAutoecoleController extends ControllerBase {
    * Builds the response to showing the Vue-js app.
    * On definit les urls pour l'initialisation de l'application.
    */
-  public function build() {
-    /**
-     *
-     * @var \Drupal\domain_source\HttpKernel\DomainSourcePathProcessor $domain_source
-     */
-    $domain_source = \Drupal::service('domain_source.path_processor');
-    $domain = $domain_source->getActiveDomain();
-    if (!$domain || !$this->currentUser()->id()) {
+  public function build($type_boite) {
+    if (!$this->currentUser()->id()) {
       $this->messenger()->addWarning('Vous devez etre connecter afin de pouvoir effectuer une reservation');
       $build['content'] = [];
       return $build;
@@ -33,9 +27,9 @@ class BookingsystemAutoecoleController extends ControllerBase {
      *
      * @var string $booking_config_type_id
      */
-    
-    $booking_config_type_id = $domain->id(); // on definit cet id juste pour les
-                                             // tests.
+    $booking_config_type_id = lesroidelareno::getCurrentDomainId();
+    if ($type_boite == 'automatique')
+      $booking_config_type_id = $booking_config_type_id . 'auto';
     $urlCalendar = Url::fromRoute("bookingsystem_autoecole.app_load_config_calendar");
     $urlCreneaux = Url::fromRoute("bookingsystem_autoecole.app_load_creneaux", [
       'booking_config_type_id' => $booking_config_type_id,
@@ -62,21 +56,42 @@ class BookingsystemAutoecoleController extends ControllerBase {
   }
   
   /**
-   * Permet de generer et de configurer RDV par domaine.
+   * Permet de generer et de configurer RDV par domaine pour le type de
+   * transmission manuel.
    */
   public function ConfigureDefault() {
     $entity_type_id = "booking_config_type";
-    /**
-     *
-     * @var \Drupal\domain_source\HttpKernel\DomainSourcePathProcessor $domain_source
-     */
-    $domain_source = \Drupal::service('domain_source.path_processor');
-    $domain = $domain_source->getActiveDomain();
-    $entityConfig = $this->entityTypeManager()->getStorage($entity_type_id)->load($domain->id());
+    $entityConfig = $this->entityTypeManager()->getStorage($entity_type_id)->load(lesroidelareno::getCurrentDomainId());
     if (!$entityConfig) {
       $entityConfig = $this->entityTypeManager()->getStorage($entity_type_id)->create([
-        'id' => $domain->id(),
-        'label' => $domain->label(),
+        'id' => lesroidelareno::getCurrentDomainId(),
+        'label' => 'Configuration des creneaux boite manuelle',
+        'days' => \Drupal\booking_system\DaysSettingsInterface::DAYS
+      ]);
+      $entityConfig->save();
+    }
+    // dd($entityConfig->toArray());
+    // $entityConfig->save();
+    
+    $form = $this->entityFormBuilder()->getForm($entityConfig, "edit", [
+      'redirect_route' => 'bookingsystem_autoecole.config_resume',
+      'booking_config_type_id' => $entityConfig->id()
+    ]);
+    return $form;
+  }
+  
+  /**
+   * Permet de generer et de configurer RDV par domaine pour les boites
+   * Automatique.
+   */
+  public function ConfigureDefaultBoiteAuto() {
+    $entity_type_id = "booking_config_type";
+    $key = lesroidelareno::getCurrentDomainId() . 'auto';
+    $entityConfig = $this->entityTypeManager()->getStorage($entity_type_id)->load($key);
+    if (!$entityConfig) {
+      $entityConfig = $this->entityTypeManager()->getStorage($entity_type_id)->create([
+        'id' => $key,
+        'label' => 'Configuration des creneaux boite automatique',
         'days' => \Drupal\booking_system\DaysSettingsInterface::DAYS
       ]);
       $entityConfig->save();

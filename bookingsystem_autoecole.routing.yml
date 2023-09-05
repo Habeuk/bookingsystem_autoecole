@@ -1,5 +1,5 @@
 bookingsystem_autoecole.page.app:
-  path: '/bookingsystem-autoecole/page-app'
+  path: '/bookingsystem-autoecole/page-app/{type_boite}'
   defaults:
     _title: 'Reserver des creneaux'
     _controller: '\Drupal\bookingsystem_autoecole\Controller\BookingsystemAutoecoleController::build'
@@ -7,12 +7,20 @@ bookingsystem_autoecole.page.app:
     _permission: 'access content'
     
 bookingsystem_autoecole.config.default:
-  path: '/admin/bookingsystem-autoecole/configure-default'
+  path: '/admin/bookingsystem-autoecole/configure-default-manuel'
   defaults:
-    _title: 'Configure default'
+    _title: 'Configuration des creneaux boite manuelle'
     _controller: '\Drupal\bookingsystem_autoecole\Controller\BookingsystemAutoecoleController::ConfigureDefault'
   requirements:
     _role: 'gerant_de_site_web+administrator'
+
+bookingsystem_autoecole.config.default.auto:
+  path: '/admin/bookingsystem-autoecole/configure-default-automatique'
+  defaults:
+    _title: 'Configuration des creneaux boite automatique'
+    _controller: '\Drupal\bookingsystem_autoecole\Controller\BookingsystemAutoecoleController::ConfigureDefaultBoiteAuto'
+  requirements:
+    _role: 'gerant_de_site_web+administrator'    
 
 bookingsystem_autoecole.save_reservation:
   path: "/bookingsystem-autoecole/save-reservation/{booking_config_type_id}"

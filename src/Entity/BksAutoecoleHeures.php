@@ -267,6 +267,18 @@ class BksAutoecoleHeures extends EditorialContentEntityBase implements BksAutoec
         'manuel' => "Manuel"
       ]
     ])->setRequired(true);
+    /**
+     * Les heures doivent etre regrouper en fonction du type de conduite.
+     * auto ou manulle.
+     */
+    $fields['type_boite'] = BaseFieldDefinition::create('list_string')->setLabel(" Type de transmission ")->setDisplayOptions('form', [
+      'type' => 'options_select'
+    ])->setDisplayConfigurable('view', TRUE)->setDisplayConfigurable('form', true)->setSettings([
+      'allowed_values' => [
+        'automatique' => "Transmission automatique",
+        'manuelle' => "Transmission manuelle"
+      ]
+    ])->setRequired(true);
     
     $fields['owner_heures_id'] = BaseFieldDefinition::create('entity_reference')->setLabel(t('User to whom the hours belong'))->setRevisionable(TRUE)->setSetting('target_type', 'user')->setSetting('handler', 'default')->setDisplayOptions('view', [
       'label' => 'hidden',

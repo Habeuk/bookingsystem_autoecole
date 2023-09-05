@@ -12,7 +12,7 @@ use Drupal\Core\Url;
  *
  * @FieldFormatter(
  *   id = "bookingsystem_autoecole_linkforcreneau",
- *   label = @Translation("Link For Creneau"),
+ *   label = @Translation(" Link For Creneau (auto-ecole) "),
  *   field_types = {
  *     "string",
  *     "link"
@@ -73,24 +73,54 @@ class LinkforcreneauFormatter extends FormatterBase {
          * @var \Drupal\bookingsystem_autoecole\Services\ManagerCreneauxAuto $manager_creneaux
          */
         $manager_creneaux = \Drupal::service("bookingsystem_autoecole.app_manager_creneaux");
-        $hours = $manager_creneaux->getHoursByUser();
-        if ($hours) {
-          $url = Url::fromRoute($routeName);
-          foreach ($items as $delta => $item) {
-            $element[$delta] = [
-              '#type' => 'link',
-              '#title' => $item->title,
-              '#options' => [
-                'attributes' => [
-                  'class' => [
-                    'btn',
-                    'btn-primary',
-                    'd-block'
+        $hours_manuel = $manager_creneaux->getHoursByUser('manuelle');
+        $hours_auto = $manager_creneaux->getHoursByUser('automatique');
+        
+        if ($hours_manuel > 0 || $hours_auto > 0) {
+          $addSuffix = false;
+          if ($hours_auto > 0 && $hours_manuel > 0)
+            $addSuffix = true;
+          if ($hours_auto > 0) {
+            $url = Url::fromRoute($routeName, [
+              'type_boite' => 'automatique'
+            ]);
+            foreach ($items as $delta => $item) {
+              $element[$delta] = [
+                '#type' => 'link',
+                '#title' => $item->title . $addSuffix ? "( Boite automatique )" : '',
+                '#options' => [
+                  'attributes' => [
+                    'class' => [
+                      'btn',
+                      'btn-primary',
+                      'd-block'
+                    ]
                   ]
                 ]
-              ]
-            ];
-            $element[$delta]['#url'] = $url;
+              ];
+              $element[$delta]['#url'] = $url;
+            }
+          }
+          if ($hours_manuel > 0) {
+            $url = Url::fromRoute($routeName, [
+              'type_boite' => 'manuelle'
+            ]);
+            foreach ($items as $delta => $item) {
+              $element[$delta] = [
+                '#type' => 'link',
+                '#title' => $item->title . $addSuffix ? "( Boite manuelle )" : '',
+                '#options' => [
+                  'attributes' => [
+                    'class' => [
+                      'btn',
+                      'btn-primary',
+                      'd-block'
+                    ]
+                  ]
+                ]
+              ];
+              $element[$delta]['#url'] = $url;
+            }
           }
         }
         else {

@@ -1,9 +1,4 @@
 services:
-  bookingsystem_autoecole.event_subscriber:
-    class: Drupal\bookingsystem_autoecole\EventSubscriber\BookingsystemAutoecoleSubscriber
-    arguments: ['@messenger']
-    tags:
-      - { name: event_subscriber }
   bookingsystem_autoecole.order_paid:
     class: Drupal\bookingsystem_autoecole\EventSubscriber\AfterOrderPaid
     arguments: ['@entity_type.manager','@messenger']

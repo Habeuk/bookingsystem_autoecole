@@ -43,21 +43,23 @@ class ManagerCreneauxAuto extends ManagerCreneaux {
     return 0;
   }
   
-  public function buildCreneaux($date_string) {
+  public function buildCreneaux($date_string, $type_boite) {
     $results = parent::buildCreneaux($date_string);
-    // on ajoute les paramettres specifique à ce sous module.
-    $results['hours'] = $this->getHoursByUser();
+    // On ajoute les paramettres specifique à ce sous module.
+    $results['hours'] = $this->getHoursByUser($type_boite);
     return $results;
   }
   
   /**
-   * Recupere le nombre d'heure restant par utilisateur.
+   * Recupere le nombre d'heure restant par utilisateur en fonction du type de
+   * conduite.
    */
-  public function getHoursByUser() {
+  public function getHoursByUser($type_boite = 'manuelle') {
     if ($this->hours === NULL) {
       $hours = 0;
       $entities = $this->entityTypeManager->getStorage('bks_autoecole_heures')->loadByProperties([
         'owner_heures_id' => lesroidelareno::getCurrentUserId(),
+        'type_boite' => $type_boite,
         \Drupal\domain_access\DomainAccessManagerInterface::DOMAIN_ACCESS_FIELD => lesroidelareno::getCurrentDomainId()
       ]);
       if ($entities) {
