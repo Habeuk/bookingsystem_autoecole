@@ -14,6 +14,13 @@ use Drupal\lesroidelareno\lesroidelareno;
 class ManagerDateAuto extends ManagerDate {
   
   /**
+   * Permet de selectionner le type de boite de transmission.
+   *
+   * @var string
+   */
+  public $type_boite = 'manuelle';
+  
+  /**
    *
    * @var ManagerCreneauxAuto
    */
@@ -93,6 +100,12 @@ class ManagerDateAuto extends ManagerDate {
           '#value' => t('You have booked slots')
         ];
       }
+      //
+      $messages['type_boite'] = [
+        '#type' => 'html_tag',
+        '#tag' => 'p',
+        '#value' => " Boite " . $this->type_boite
+      ];
       $messages['creneaux'] = $creneaux;
       $this->sendMails($email, $subject, [
         '#theme' => 'wbh_php_mailer_plugin_mail',
