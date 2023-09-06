@@ -82,7 +82,7 @@ class LinkforcreneauFormatter extends FormatterBase {
             ]);
             $suffix = '';
             if ($hours_auto > 0 && $hours_manuel > 0)
-              $suffix = "( Boite automatique )";
+              $suffix = " ( Boite automatique )";
             foreach ($items as $item) {
               $element[] = [
                 '#type' => 'link',
@@ -104,7 +104,7 @@ class LinkforcreneauFormatter extends FormatterBase {
           if ($hours_manuel > 0) {
             $suffix = '';
             if ($hours_auto > 0 && $hours_manuel > 0)
-              $suffix = "( Boite manuelle )";
+              $suffix = " ( Boite manuelle )";
             $url = Url::fromRoute($routeName, [
               'type_boite' => 'manuelle'
             ]);
