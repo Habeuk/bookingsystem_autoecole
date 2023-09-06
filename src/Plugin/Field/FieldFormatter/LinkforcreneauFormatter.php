@@ -92,7 +92,8 @@ class LinkforcreneauFormatter extends FormatterBase {
                     'class' => [
                       'btn',
                       'btn-primary',
-                      'd-block'
+                      'd-block',
+                      'mb-3'
                     ]
                   ]
                 ],
