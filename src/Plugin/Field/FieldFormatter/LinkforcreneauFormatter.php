@@ -83,8 +83,8 @@ class LinkforcreneauFormatter extends FormatterBase {
             $suffix = '';
             if ($hours_auto > 0 && $hours_manuel > 0)
               $suffix = "( Boite automatique )";
-            foreach ($items as $delta => $item) {
-              $element['auto' . $delta] = [
+            foreach ($items as $item) {
+              $element[] = [
                 '#type' => 'link',
                 '#title' => $item->title . $suffix,
                 '#options' => [
@@ -95,9 +95,9 @@ class LinkforcreneauFormatter extends FormatterBase {
                       'd-block'
                     ]
                   ]
-                ]
+                ],
+                '#url' => $url
               ];
-              $element['auto' . $delta]['#url'] = $url;
             }
           }
           if ($hours_manuel > 0) {
@@ -107,8 +107,8 @@ class LinkforcreneauFormatter extends FormatterBase {
             $url = Url::fromRoute($routeName, [
               'type_boite' => 'manuelle'
             ]);
-            foreach ($items as $delta => $item) {
-              $element['manu' . $delta] = [
+            foreach ($items as $item) {
+              $element[] = [
                 '#type' => 'link',
                 '#title' => $item->title . $suffix,
                 '#options' => [
@@ -119,9 +119,9 @@ class LinkforcreneauFormatter extends FormatterBase {
                       'd-block'
                     ]
                   ]
-                ]
+                ],
+                '#url' => $url
               ];
-              $element['manu' . $delta]['#url'] = $url;
             }
           }
         }
