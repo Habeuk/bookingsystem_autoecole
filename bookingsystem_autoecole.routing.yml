@@ -23,7 +23,7 @@ bookingsystem_autoecole.config.default.auto:
     _role: 'gerant_de_site_web+administrator'    
 
 bookingsystem_autoecole.save_reservation:
-  path: "/bookingsystem-autoecole/save-reservation/{booking_config_type_id}"
+  path: "/bookingsystem-autoecole/save-reservation/{booking_config_type_id}/{type_boite}"
   defaults:
     _title: "Reservation"
     _controller: '\Drupal\bookingsystem_autoecole\Controller\BookingSystemUseApp::SaveReservation'

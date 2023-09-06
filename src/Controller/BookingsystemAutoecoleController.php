@@ -37,7 +37,8 @@ class BookingsystemAutoecoleController extends ControllerBase {
       'date' => null
     ]);
     $urlSave = Url::fromRoute("bookingsystem_autoecole.save_reservation", [
-      'booking_config_type_id' => $booking_config_type_id
+      'booking_config_type_id' => $booking_config_type_id,
+      'type_boite' => $type_boite
     ]);
     $build['content'] = [
       '#type' => 'html_tag',

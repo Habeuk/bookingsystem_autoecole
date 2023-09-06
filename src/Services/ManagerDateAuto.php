@@ -40,11 +40,15 @@ class ManagerDateAuto extends ManagerDate {
    *
    * @param array $values
    */
-  public function retrancheLesHeures(array $values) {
-    $bks_autoecole_heures = $this->entityTypeManager->getStorage('bks_autoecole_heures')->loadByProperties([
+  public function retrancheLesHeures(array $values, $type_boite) {
+    $filters = [
       'owner_heures_id' => lesroidelareno::getCurrentUserId(),
       \Drupal\domain_access\DomainAccessManagerInterface::DOMAIN_ACCESS_FIELD => lesroidelareno::getCurrentDomainId()
-    ]);
+    ];
+    if ($type_boite == 'automatique' || $type_boite == 'manuelle') {
+      $filters['type_boite'] = $type_boite;
+    }
+    $bks_autoecole_heures = $this->entityTypeManager->getStorage('bks_autoecole_heures')->loadByProperties($filters);
     $hours = count($values['creneaux']);
     foreach ($bks_autoecole_heures as $bks_autoecole_heure) {
       /**

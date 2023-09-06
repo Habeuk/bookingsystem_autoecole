@@ -90,11 +90,11 @@ class BookingSystemUseApp extends ControllerBase {
    *
    * @param string $booking_config_type_id
    */
-  public function SaveReservation(Request $Request, string $booking_config_type_id) {
+  public function SaveReservation(Request $Request, string $booking_config_type_id, $type_boite) {
     try {
       $values = Json::decode($Request->getContent());
       $configs = $this->BookingMangerDate->saveCreneaux($booking_config_type_id, $values);
-      $this->BookingMangerDate->retrancheLesHeures($values);
+      $this->BookingMangerDate->retrancheLesHeures($values, $type_boite);
       //
       return HttpResponse::response($configs);
     }
