@@ -27,7 +27,7 @@ class BookingsystemAutoecoleController extends ControllerBase {
      *
      * @var string $booking_config_type_id
      */
-    $booking_config_type_id = lesroidelareno::getCurrentDomainId();
+    $booking_config_type_id = lesroidelareno::getCurrentPrefixDomain();
     if ($type_boite == 'automatique')
       $booking_config_type_id = $booking_config_type_id . 'auto';
     $urlCalendar = Url::fromRoute("bookingsystem_autoecole.app_load_config_calendar");
@@ -63,10 +63,10 @@ class BookingsystemAutoecoleController extends ControllerBase {
    */
   public function ConfigureDefault() {
     $entity_type_id = "booking_config_type";
-    $entityConfig = $this->entityTypeManager()->getStorage($entity_type_id)->load(lesroidelareno::getCurrentDomainId());
+    $entityConfig = $this->entityTypeManager()->getStorage($entity_type_id)->load(lesroidelareno::getCurrentPrefixDomain());
     if (!$entityConfig) {
       $entityConfig = $this->entityTypeManager()->getStorage($entity_type_id)->create([
-        'id' => lesroidelareno::getCurrentDomainId(),
+        'id' => lesroidelareno::getCurrentPrefixDomain(),
         'label' => 'Configuration des creneaux boite manuelle',
         'days' => \Drupal\booking_system\DaysSettingsInterface::DAYS
       ]);
@@ -88,7 +88,7 @@ class BookingsystemAutoecoleController extends ControllerBase {
    */
   public function ConfigureDefaultBoiteAuto() {
     $entity_type_id = "booking_config_type";
-    $key = lesroidelareno::getCurrentDomainId() . 'auto';
+    $key = lesroidelareno::getCurrentPrefixDomain() . 'auto';
     $entityConfig = $this->entityTypeManager()->getStorage($entity_type_id)->load($key);
     if (!$entityConfig) {
       $entityConfig = $this->entityTypeManager()->getStorage($entity_type_id)->create([

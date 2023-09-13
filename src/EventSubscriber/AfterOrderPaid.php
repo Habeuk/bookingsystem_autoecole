@@ -80,7 +80,7 @@ class AfterOrderPaid implements EventSubscriberInterface {
     if ($hours_auto > 0) {
       $uid = \Drupal::currentUser()->id();
       $values = [
-        'booking_config_type' => lesroidelareno::getCurrentDomainId(),
+        'booking_config_type' => lesroidelareno::getCurrentPrefixDomain(),
         'name' => $order->label(),
         'source' => 'order',
         'user_id' => $uid,
@@ -100,7 +100,7 @@ class AfterOrderPaid implements EventSubscriberInterface {
     if ($hours_manuel > 0) {
       $uid = \Drupal::currentUser()->id();
       $values = [
-        'booking_config_type' => lesroidelareno::getCurrentDomainId(),
+        'booking_config_type' => lesroidelareno::getCurrentPrefixDomain(),
         'name' => $order->label(),
         'source' => 'order',
         'user_id' => $uid,
@@ -120,7 +120,7 @@ class AfterOrderPaid implements EventSubscriberInterface {
     if ($hours > 0) {
       $uid = \Drupal::currentUser()->id();
       $values = [
-        'booking_config_type' => lesroidelareno::getCurrentDomainId(),
+        'booking_config_type' => lesroidelareno::getCurrentPrefixDomain(),
         'name' => $order->label(),
         'source' => 'order',
         'user_id' => $uid,

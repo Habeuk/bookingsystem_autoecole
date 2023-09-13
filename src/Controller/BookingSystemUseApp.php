@@ -51,7 +51,7 @@ class BookingSystemUseApp extends ControllerBase {
        *
        * @var string $booking_config_type_id
        */
-      $booking_config_type_id = lesroidelareno::getCurrentDomainId();
+      $booking_config_type_id = lesroidelareno::getCurrentPrefixDomain();
       $configs = $this->BookingMangerDate->loadBookingConfig($booking_config_type_id);
       return HttpResponse::response($configs);
     }

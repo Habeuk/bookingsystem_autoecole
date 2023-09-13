@@ -106,6 +106,7 @@ class ManagerDateAuto extends ManagerDate {
         '#tag' => 'p',
         '#value' => " Boite " . $this->type_boite
       ];
+      //
       $messages['creneaux'] = $creneaux;
       $this->sendMails($email, $subject, [
         '#theme' => 'wbh_php_mailer_plugin_mail',
