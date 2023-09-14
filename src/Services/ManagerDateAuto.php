@@ -77,6 +77,25 @@ class ManagerDateAuto extends ManagerDate {
     }
   }
   
+  protected function getHoursRemainds() {
+    $hours = 0;
+    $entities = $this->entityTypeManager->getStorage('bks_autoecole_heures')->loadByProperties([
+      'owner_heures_id' => lesroidelareno::getCurrentUserId(),
+      'type_boite' => $this->type_boite,
+      \Drupal\domain_access\DomainAccessManagerInterface::DOMAIN_ACCESS_FIELD => lesroidelareno::getCurrentDomainId()
+    ]);
+    if ($entities) {
+      foreach ($entities as $entity) {
+        /**
+         *
+         * @var \Drupal\bookingsystem_autoecole\Entity\BksAutoecoleHeures $entity
+         */
+        $hours += $entity->getCreneauxLive();
+      }
+    }
+    return $hours;
+  }
+  
   /**
    * Prepare le contenu du mail à envoyer à l'utilisateur.
    *
@@ -105,6 +124,11 @@ class ManagerDateAuto extends ManagerDate {
         '#type' => 'html_tag',
         '#tag' => 'p',
         '#value' => " Boite " . $this->type_boite
+      ];
+      $messages['hours'] = [
+        '#type' => 'html_tag',
+        '#tag' => 'p',
+        '#value' => " Heures restantes :  " . $this->getHoursRemainds()
       ];
       //
       $messages['creneaux'] = $creneaux;
