@@ -2,13 +2,7 @@
 
 namespace Drupal\bookingsystem_autoecole\Services;
 
-use Drupal\Core\Entity\EntityTypeManager;
-use Drupal\Core\Session\AccountInterface;
-use Drupal\booking_system\Entity\BookingConfigType;
-use Drupal\booking_system\Exception\BookingSystemException;
-use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\booking_system\Services\BookingManager\ManagerCreneaux;
-use Drupal\lesroidelareno\lesroidelareno;
 
 /**
  * Permet de gerer l'affichage du calendrier ou des jours à afficher pour les
@@ -65,11 +59,14 @@ class ManagerCreneauxAuto extends ManagerCreneaux {
       if ($type_boite === NULL)
         $type_boite = $this->type_boite;
       $hours = 0;
-      $entities = $this->entityTypeManager->getStorage('bks_autoecole_heures')->loadByProperties([
-        'owner_heures_id' => lesroidelareno::getCurrentUserId(),
-        'type_boite' => $type_boite,
-        \Drupal\domain_access\DomainAccessManagerInterface::DOMAIN_ACCESS_FIELD => lesroidelareno::getCurrentDomainId()
-      ]);
+      $values = [
+        'type_boite' => $type_boite
+      ];
+      if (\Drupal::moduleHandler()->moduleExists('lesroidelareno')) {
+        $values['owner_heures_id'] = \Drupal\lesroidelareno\lesroidelareno::getCurrentUserId();
+        $values[\Drupal\domain_access\DomainAccessManagerInterface::DOMAIN_ACCESS_FIELD] = \Drupal\lesroidelareno\lesroidelareno::getCurrentDomainId();
+      }
+      $entities = $this->entityTypeManager->getStorage('bks_autoecole_heures')->loadByProperties($values);
       if ($entities) {
         foreach ($entities as $entity) {
           /**

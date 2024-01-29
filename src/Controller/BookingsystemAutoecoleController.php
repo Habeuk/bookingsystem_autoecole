@@ -3,8 +3,6 @@
 namespace Drupal\bookingsystem_autoecole\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
-use Drupal\lesroidelareno\lesroidelareno;
-use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
 
 /**
@@ -22,12 +20,15 @@ class BookingsystemAutoecoleController extends ControllerBase {
       $build['content'] = [];
       return $build;
     }
+    $booking_config_type_id = 'auto';
     /**
      * L'id de la config est exactement l'id du domaine.
      *
      * @var string $booking_config_type_id
      */
-    $booking_config_type_id = lesroidelareno::getCurrentPrefixDomain();
+    if (\Drupal::moduleHandler()->moduleExists('lesroidelareno')) {
+      $booking_config_type_id = \Drupal\lesroidelareno\lesroidelareno::getCurrentPrefixDomain();
+    }
     if ($type_boite == 'automatique')
       $booking_config_type_id = $booking_config_type_id . 'auto';
     $urlCalendar = Url::fromRoute("bookingsystem_autoecole.app_load_config_calendar");
@@ -63,13 +64,23 @@ class BookingsystemAutoecoleController extends ControllerBase {
    */
   public function ConfigureDefault() {
     $entity_type_id = "booking_config_type";
-    $entityConfig = $this->entityTypeManager()->getStorage($entity_type_id)->load(lesroidelareno::getCurrentPrefixDomain());
+    if (\Drupal::moduleHandler()->moduleExists('lesroidelareno')) {
+      $entityConfig = $this->entityTypeManager()->getStorage($entity_type_id)->load(\Drupal\lesroidelareno\lesroidelareno::getCurrentPrefixDomain());
+    }
+    else {
+      $entityConfigs = $this->entityTypeManager()->getStorage($entity_type_id)->loadMultiple();
+      $entityConfig = reset($entityConfigs);
+    }
     if (!$entityConfig) {
-      $entityConfig = $this->entityTypeManager()->getStorage($entity_type_id)->create([
-        'id' => lesroidelareno::getCurrentPrefixDomain(),
+      $values = [
         'label' => 'Configuration des creneaux boite manuelle',
-        'days' => \Drupal\booking_system\DaysSettingsInterface::DAYS
-      ]);
+        'days' => \Drupal\booking_system\DaysSettingsInterface::DAYS,
+        'id' => 'auto'
+      ];
+      if (\Drupal::moduleHandler()->moduleExists('lesroidelareno')) {
+        $values['id'] = \Drupal\lesroidelareno\lesroidelareno::getCurrentPrefixDomain();
+      }
+      $entityConfig = $this->entityTypeManager()->getStorage($entity_type_id)->create($values);
       $entityConfig->save();
     }
     // dd($entityConfig->toArray());

@@ -8,7 +8,6 @@ use Drupal\commerce_order\Event\OrderEvents;
 use Drupal\commerce_order\Event\OrderEvent;
 use Drupal\Core\Entity\EntityTypeManager;
 use Drupal\commerce_order\Entity\OrderInterface;
-use Drupal\lesroidelareno\lesroidelareno;
 
 /**
  * bookingsystem_autoecole event subscriber.
@@ -80,7 +79,6 @@ class AfterOrderPaid implements EventSubscriberInterface {
     if ($hours_auto > 0) {
       $uid = \Drupal::currentUser()->id();
       $values = [
-        'booking_config_type' => lesroidelareno::getCurrentPrefixDomain(),
         'name' => $order->label(),
         'source' => 'order',
         'user_id' => $uid,
@@ -89,6 +87,9 @@ class AfterOrderPaid implements EventSubscriberInterface {
         'commerce_order' => $order->id(),
         'type_boite' => 'automatique'
       ];
+      if (\Drupal::moduleHandler()->moduleExists('lesroidelareno')) {
+        $values['booking_config_type'] = \Drupal\lesroidelareno\lesroidelareno::getCurrentPrefixDomain();
+      }
       /**
        *
        * @var \Drupal\bookingsystem_autoecole\Entity\BksAutoecoleHeures $bks_autoecole_heures
@@ -100,7 +101,6 @@ class AfterOrderPaid implements EventSubscriberInterface {
     if ($hours_manuel > 0) {
       $uid = \Drupal::currentUser()->id();
       $values = [
-        'booking_config_type' => lesroidelareno::getCurrentPrefixDomain(),
         'name' => $order->label(),
         'source' => 'order',
         'user_id' => $uid,
@@ -109,6 +109,9 @@ class AfterOrderPaid implements EventSubscriberInterface {
         'commerce_order' => $order->id(),
         'type_boite' => 'manuelle'
       ];
+      if (\Drupal::moduleHandler()->moduleExists('lesroidelareno')) {
+        $values['booking_config_type'] = \Drupal\lesroidelareno\lesroidelareno::getCurrentPrefixDomain();
+      }
       /**
        *
        * @var \Drupal\bookingsystem_autoecole\Entity\BksAutoecoleHeures $bks_autoecole_heures
@@ -120,7 +123,6 @@ class AfterOrderPaid implements EventSubscriberInterface {
     if ($hours > 0) {
       $uid = \Drupal::currentUser()->id();
       $values = [
-        'booking_config_type' => lesroidelareno::getCurrentPrefixDomain(),
         'name' => $order->label(),
         'source' => 'order',
         'user_id' => $uid,
@@ -128,6 +130,9 @@ class AfterOrderPaid implements EventSubscriberInterface {
         'creneaux_live' => $hours,
         'commerce_order' => $order->id()
       ];
+      if (\Drupal::moduleHandler()->moduleExists('lesroidelareno')) {
+        $values['booking_config_type'] = \Drupal\lesroidelareno\lesroidelareno::getCurrentPrefixDomain();
+      }
       /**
        *
        * @var \Drupal\bookingsystem_autoecole\Entity\BksAutoecoleHeures $bks_autoecole_heures

@@ -7,7 +7,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Stephane888\DrupalUtility\HttpResponse;
 use Stephane888\Debug\ExceptionExtractMessage;
-use Drupal\lesroidelareno\lesroidelareno;
 use Drupal\Component\Serialization\Json;
 use Drupal\bookingsystem_autoecole\Services\ManagerCreneauxAuto;
 use Drupal\bookingsystem_autoecole\Services\ManagerDateAuto;
@@ -47,11 +46,14 @@ class BookingSystemUseApp extends ControllerBase {
    */
   public function loadConfigCalandar(Request $Request) {
     try {
+      $booking_config_type_id = 'auto';
       /**
        *
        * @var string $booking_config_type_id
        */
-      $booking_config_type_id = lesroidelareno::getCurrentPrefixDomain();
+      if (\Drupal::moduleHandler()->moduleExists('lesroidelareno')) {
+        $booking_config_type_id = \Drupal\lesroidelareno\lesroidelareno::getCurrentPrefixDomain();
+      }
       $configs = $this->BookingMangerDate->loadBookingConfig($booking_config_type_id);
       return HttpResponse::response($configs);
     }

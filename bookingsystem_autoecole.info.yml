@@ -4,5 +4,4 @@ description: Allows you to extend the functionality of the booking system so tha
 package: Custom
 core_version_requirement: ^9 || ^10
 dependencies:
-  - booking_system
-  - lesroidelareno
+  - booking_system:booking_system

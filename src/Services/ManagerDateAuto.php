@@ -4,7 +4,6 @@ namespace Drupal\bookingsystem_autoecole\Services;
 
 use Drupal\booking_system\Entity\BookingReservation;
 use Drupal\booking_system\Services\BookingManager\ManagerDate;
-use Drupal\lesroidelareno\lesroidelareno;
 
 /**
  * Permet de gerer l'affichage du calendrier ou des jours à afficher pour les
@@ -48,10 +47,12 @@ class ManagerDateAuto extends ManagerDate {
    * @param array $values
    */
   public function retrancheLesHeures(array $values, $type_boite) {
-    $filters = [
-      'owner_heures_id' => lesroidelareno::getCurrentUserId(),
-      \Drupal\domain_access\DomainAccessManagerInterface::DOMAIN_ACCESS_FIELD => lesroidelareno::getCurrentDomainId()
-    ];
+    if (\Drupal::moduleHandler()->moduleExists('lesroidelareno')) {
+      $filters = [
+        'owner_heures_id' => \Drupal\lesroidelareno\lesroidelareno::getCurrentUserId(),
+        \Drupal\domain_access\DomainAccessManagerInterface::DOMAIN_ACCESS_FIELD => \Drupal\lesroidelareno\lesroidelareno::getCurrentDomainId()
+      ];
+    }
     if ($type_boite == 'automatique' || $type_boite == 'manuelle') {
       $filters['type_boite'] = $type_boite;
     }

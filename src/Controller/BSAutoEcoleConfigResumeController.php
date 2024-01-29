@@ -4,7 +4,6 @@ namespace Drupal\bookingsystem_autoecole\Controller;
 
 use Drupal\booking_system\Controller\BookingSystemConfigResumeController;
 use Symfony\Component\HttpFoundation\Request;
-use Drupal\Core\Url;
 
 /**
  * Returns responses for booking_system routes.
