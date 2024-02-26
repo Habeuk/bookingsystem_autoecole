@@ -11,6 +11,6 @@
     ],
     "minimum-stability": "dev",
     "require": {
-    	"habeuk/booking_system": "dev-2x|^2.0"
+    	"habeuk/booking_system": "dev-2x|^2.0.2"
     }
 }
