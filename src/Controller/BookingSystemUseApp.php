@@ -15,24 +15,24 @@ use Drupal\bookingsystem_autoecole\Services\ManagerDateAuto;
  * Returns responses for bookingsystem_autoecole routes.
  */
 class BookingSystemUseApp extends ControllerBase {
-  
+
   /**
    *
    * @var ManagerDateAuto
    */
   protected $BookingMangerDate;
-  
+
   /**
    *
    * @var ManagerCreneauxAuto
    */
   protected $ManagerCreneaux;
-  
+
   public function __construct(ManagerDateAuto $ManagerDate, ManagerCreneauxAuto $ManagerCreneaux) {
     $this->BookingMangerDate = $ManagerDate;
     $this->ManagerCreneaux = $ManagerCreneaux;
   }
-  
+
   /**
    *
    * {@inheritdoc}
@@ -40,7 +40,7 @@ class BookingSystemUseApp extends ControllerBase {
   public static function create(ContainerInterface $container) {
     return new static($container->get('bookingsystem_autoecole.app_manager_date'), $container->get('bookingsystem_autoecole.app_manager_creneaux'));
   }
-  
+
   /**
    * Permet de charger la configuration par defaut.
    */
@@ -56,15 +56,25 @@ class BookingSystemUseApp extends ControllerBase {
       }
       $configs = $this->BookingMangerDate->loadBookingConfig($booking_config_type_id);
       return HttpResponse::response($configs);
-    }
-    catch (\Exception $e) {
-      return HttpResponse::response(ExceptionExtractMessage::errorAll($e), 435);
-    }
-    catch (\Error $e) {
-      return HttpResponse::response(ExceptionExtractMessage::errorAll($e), 435);
+    } catch (\Exception $e) {
+      return HttpResponse::response(
+        [
+          "maintennace" => true,
+          "ban_reason" => "<div>Erreur de configuration</div>"
+        ]
+      );      // return HttpResponse::response(ExceptionExtractMessage::errorAll($e), 435);
+    } catch (\Error $e) {
+      return HttpResponse::response(
+        [
+          "maintennace" => true,
+          "ban_reason" => "<div>Erreur de configuration</div>"
+        ]
+      );
+
+      // return HttpResponse::response(ExceptionExtractMessage::errorAll($e), 435);
     }
   }
-  
+
   /**
    * Permet de recuperer les données de configurations pour la construction des
    * creneaux.
@@ -78,15 +88,13 @@ class BookingSystemUseApp extends ControllerBase {
       $this->ManagerCreneaux->type_boite = $type_boite;
       $configs = $this->ManagerCreneaux->loadCreneaux($booking_config_type_id, $date);
       return HttpResponse::response($configs);
-    }
-    catch (\Exception $e) {
+    } catch (\Exception $e) {
       return HttpResponse::response(ExceptionExtractMessage::errorAll($e), 435);
-    }
-    catch (\Error $e) {
+    } catch (\Error $e) {
       return HttpResponse::response(ExceptionExtractMessage::errorAll($e), 435);
     }
   }
-  
+
   /**
    * Enregistrer un creneau.
    *
@@ -100,13 +108,10 @@ class BookingSystemUseApp extends ControllerBase {
       $this->BookingMangerDate->retrancheLesHeures($values, $type_boite);
       //
       return HttpResponse::response($configs);
-    }
-    catch (\Exception $e) {
+    } catch (\Exception $e) {
       return HttpResponse::response(ExceptionExtractMessage::errorAll($e), 435);
-    }
-    catch (\Error $e) {
+    } catch (\Error $e) {
       return HttpResponse::response(ExceptionExtractMessage::errorAll($e), 435);
     }
   }
-  
 }
