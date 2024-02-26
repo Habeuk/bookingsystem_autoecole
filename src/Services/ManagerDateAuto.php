@@ -80,11 +80,14 @@ class ManagerDateAuto extends ManagerDate {
   
   protected function getHoursRemainds() {
     $hours = 0;
-    $entities = $this->entityTypeManager->getStorage('bks_autoecole_heures')->loadByProperties([
-      'owner_heures_id' => lesroidelareno::getCurrentUserId(),
-      'type_boite' => $this->type_boite,
-      \Drupal\domain_access\DomainAccessManagerInterface::DOMAIN_ACCESS_FIELD => lesroidelareno::getCurrentDomainId()
-    ]);
+    $filters = [
+      'type_boite' => $this->type_boite
+    ];
+    if (\Drupal::moduleHandler()->moduleExists('lesroidelareno')) {
+      $filters['owner_heures_id'] = \Drupal\lesroidelareno\lesroidelareno::getCurrentUserId();
+      $filters[\Drupal\domain_access\DomainAccessManagerInterface::DOMAIN_ACCESS_FIELD] = \Drupal\lesroidelareno\lesroidelareno::getCurrentDomainId();
+    }
+    $entities = $this->entityTypeManager->getStorage('bks_autoecole_heures')->loadByProperties($filters);
     if ($entities) {
       foreach ($entities as $entity) {
         /**
