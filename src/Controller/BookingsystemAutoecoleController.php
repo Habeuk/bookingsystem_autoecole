@@ -9,7 +9,7 @@ use Drupal\Core\Url;
  * Returns responses for bookingsystem_autoecole routes.
  */
 class BookingsystemAutoecoleController extends ControllerBase {
-  
+
   /**
    * Builds the response to showing the Vue-js app.
    * On definit les urls pour l'initialisation de l'application.
@@ -57,7 +57,7 @@ class BookingsystemAutoecoleController extends ControllerBase {
     $build['content']['#attached']['library'][] = 'booking_system/booking_system_app2';
     return $build;
   }
-  
+
   /**
    * Permet de generer et de configurer RDV par domaine pour le type de
    * transmission manuel.
@@ -66,8 +66,7 @@ class BookingsystemAutoecoleController extends ControllerBase {
     $entity_type_id = "booking_config_type";
     if (\Drupal::moduleHandler()->moduleExists('lesroidelareno')) {
       $entityConfig = $this->entityTypeManager()->getStorage($entity_type_id)->load(\Drupal\lesroidelareno\lesroidelareno::getCurrentPrefixDomain());
-    }
-    else {
+    } else {
       $entityConfigs = $this->entityTypeManager()->getStorage($entity_type_id)->loadMultiple();
       $entityConfig = reset($entityConfigs);
     }
@@ -85,21 +84,21 @@ class BookingsystemAutoecoleController extends ControllerBase {
     }
     // dd($entityConfig->toArray());
     // $entityConfig->save();
-    
+
     $form = $this->entityFormBuilder()->getForm($entityConfig, "edit", [
       'redirect_route' => 'bookingsystem_autoecole.config_resume',
       'booking_config_type_id' => $entityConfig->id()
     ]);
     return $form;
   }
-  
+
   /**
    * Permet de generer et de configurer RDV par domaine pour les boites
    * Automatique.
    */
   public function ConfigureDefaultBoiteAuto() {
     $entity_type_id = "booking_config_type";
-    $key = lesroidelareno::getCurrentPrefixDomain() . 'auto';
+    $key =  \Drupal\lesroidelareno\lesroidelareno::getCurrentPrefixDomain() . 'auto';
     $entityConfig = $this->entityTypeManager()->getStorage($entity_type_id)->load($key);
     if (!$entityConfig) {
       $entityConfig = $this->entityTypeManager()->getStorage($entity_type_id)->create([
@@ -111,12 +110,11 @@ class BookingsystemAutoecoleController extends ControllerBase {
     }
     // dd($entityConfig->toArray());
     // $entityConfig->save();
-    
+
     $form = $this->entityFormBuilder()->getForm($entityConfig, "edit", [
       'redirect_route' => 'bookingsystem_autoecole.config_resume',
       'booking_config_type_id' => $entityConfig->id()
     ]);
     return $form;
   }
-  
 }
