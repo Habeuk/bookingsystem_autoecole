@@ -24,7 +24,7 @@ class AfterOrderPaid implements EventSubscriberInterface {
    * @var \Drupal\Core\Messenger\MessengerInterface
    */
   protected $messenger;
-  
+
   /**
    * Constructs event subscriber.
    *
@@ -35,12 +35,12 @@ class AfterOrderPaid implements EventSubscriberInterface {
     $this->messenger = $messenger;
     $this->entityTypeManger = $entityTypeManger;
   }
-  
+
   public function onOrderPaid(OrderEvent $event) {
     $order = $event->getOrder();
     $this->AddHoursIfIscorrectProduct($order);
   }
-  
+
   /*
    * Permet d'ajouter/creer les heures si les données sont valides.
    */
@@ -66,11 +66,9 @@ class AfterOrderPaid implements EventSubscriberInterface {
           $type_de_transmission = $entityPurchase->get('field_type_de_transmission')->value;
           if ($type_de_transmission == 'automatique') {
             $hours_auto += $qty * $entityPurchase->get('field_hours')->value;
-          }
-          elseif ($type_de_transmission == 'manuelle') {
+          } elseif ($type_de_transmission == 'manuelle') {
             $hours_manuel += $qty * $entityPurchase->get('field_hours')->value;
-          }
-          else {
+          } else {
             $hours += $qty * $entityPurchase->get('field_hours')->value;
           }
         }
@@ -89,6 +87,9 @@ class AfterOrderPaid implements EventSubscriberInterface {
       ];
       if (\Drupal::moduleHandler()->moduleExists('lesroidelareno')) {
         $values['booking_config_type'] = \Drupal\lesroidelareno\lesroidelareno::getCurrentPrefixDomain();
+      } else {
+        $configs = \Drupal::config("wb_horizon_public.config_auto_ecole");
+        $values['booking_config_type'] = $configs->get("conduite_auto");
       }
       /**
        *
@@ -111,6 +112,9 @@ class AfterOrderPaid implements EventSubscriberInterface {
       ];
       if (\Drupal::moduleHandler()->moduleExists('lesroidelareno')) {
         $values['booking_config_type'] = \Drupal\lesroidelareno\lesroidelareno::getCurrentPrefixDomain();
+      } else {
+        $configs = \Drupal::config("wb_horizon_public.config_auto_ecole");
+        $values['booking_config_type'] = $configs->get("conduite_manuelle");
       }
       /**
        *
@@ -132,6 +136,9 @@ class AfterOrderPaid implements EventSubscriberInterface {
       ];
       if (\Drupal::moduleHandler()->moduleExists('lesroidelareno')) {
         $values['booking_config_type'] = \Drupal\lesroidelareno\lesroidelareno::getCurrentPrefixDomain();
+      } else {
+        $configs = \Drupal::config("wb_horizon_public.config_auto_ecole");
+        $values['booking_config_type'] = $configs->get("conduite_manuelle");
       }
       /**
        *
@@ -142,7 +149,7 @@ class AfterOrderPaid implements EventSubscriberInterface {
       $this->messenger->addMessage(" Vous bénéficiez de : " . $hours . " heure(s) ");
     }
   }
-  
+
   /**
    *
    * {@inheritdoc}
@@ -154,6 +161,4 @@ class AfterOrderPaid implements EventSubscriberInterface {
       ]
     ];
   }
-  
 }
-
