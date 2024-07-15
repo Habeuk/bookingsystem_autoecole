@@ -56,7 +56,6 @@ class BookingSystemUseApp extends ControllerBase {
       } else {
         $configs = $this->config("wb_horizon_public.config_auto_ecole");
         $booking_config_type_id = $configs->get("conduite_auto");
-        $booking_config_type_id = "test_auto_ecoleauto";
       }
       $configs = $this->BookingMangerDate->loadBookingConfig($booking_config_type_id);
       return HttpResponse::response($configs);
