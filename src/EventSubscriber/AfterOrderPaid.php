@@ -86,7 +86,7 @@ class AfterOrderPaid implements EventSubscriberInterface {
         'type_boite' => 'automatique'
       ];
       if (\Drupal::moduleHandler()->moduleExists('lesroidelareno')) {
-        $values['booking_config_type'] = \Drupal\lesroidelareno\lesroidelareno::getCurrentPrefixDomain();
+        $values['booking_config_type'] = \Drupal\lesroidelareno\lesroidelareno::getCurrentPrefixDomain() . "auto";
       } else {
         $configs = \Drupal::config("wb_horizon_public.config_auto_ecole");
         $values['booking_config_type'] = $configs->get("conduite_auto");
