@@ -20,17 +20,8 @@ class BookingsystemAutoecoleController extends ControllerBase {
       $build['content'] = [];
       return $build;
     }
-    $booking_config_type_id = 'auto';
-    /**
-     * L'id de la config est exactement l'id du domaine.
-     *
-     * @var string $booking_config_type_id
-     */
-    if (\Drupal::moduleHandler()->moduleExists('lesroidelareno')) {
-      $booking_config_type_id = \Drupal\lesroidelareno\lesroidelareno::getCurrentPrefixDomain();
-    }
-    if ($type_boite == 'automatique')
-      $booking_config_type_id = $booking_config_type_id . 'auto';
+    $booking_config_type_id = $type_boite != "autommatique" ? $this->getEntityConfigId() : $this->getEntityConfigId("automatique", "conduite_auto");
+
     $urlCalendar = Url::fromRoute("bookingsystem_autoecole.app_load_config_calendar");
     $urlCreneaux = Url::fromRoute("bookingsystem_autoecole.app_load_creneaux", [
       'booking_config_type_id' => $booking_config_type_id,
@@ -63,28 +54,7 @@ class BookingsystemAutoecoleController extends ControllerBase {
    * transmission manuel.
    */
   public function ConfigureDefault() {
-    $entity_type_id = "booking_config_type";
-    if (\Drupal::moduleHandler()->moduleExists('lesroidelareno')) {
-      $entityConfig = $this->entityTypeManager()->getStorage($entity_type_id)->load(\Drupal\lesroidelareno\lesroidelareno::getCurrentPrefixDomain());
-    } else {
-      $entityConfigs = $this->entityTypeManager()->getStorage($entity_type_id)->loadMultiple();
-      $entityConfig = reset($entityConfigs);
-    }
-    if (!$entityConfig) {
-      $values = [
-        'label' => 'Configuration des creneaux boite manuelle',
-        'days' => \Drupal\booking_system\DaysSettingsInterface::DAYS,
-        'id' => 'auto'
-      ];
-      if (\Drupal::moduleHandler()->moduleExists('lesroidelareno')) {
-        $values['id'] = \Drupal\lesroidelareno\lesroidelareno::getCurrentPrefixDomain();
-      }
-      $entityConfig = $this->entityTypeManager()->getStorage($entity_type_id)->create($values);
-      $entityConfig->save();
-    }
-    // dd($entityConfig->toArray());
-    // $entityConfig->save();
-
+    $entityConfig = $this->getEntityConfigId();
     $form = $this->entityFormBuilder()->getForm($entityConfig, "edit", [
       'redirect_route' => 'bookingsystem_autoecole.config_resume',
       'booking_config_type_id' => $entityConfig->id()
@@ -97,24 +67,52 @@ class BookingsystemAutoecoleController extends ControllerBase {
    * Automatique.
    */
   public function ConfigureDefaultBoiteAuto() {
-    $entity_type_id = "booking_config_type";
-    $key =  \Drupal\lesroidelareno\lesroidelareno::getCurrentPrefixDomain() . 'auto';
-    $entityConfig = $this->entityTypeManager()->getStorage($entity_type_id)->load($key);
-    if (!$entityConfig) {
-      $entityConfig = $this->entityTypeManager()->getStorage($entity_type_id)->create([
-        'id' => $key,
-        'label' => 'Configuration des creneaux boite automatique',
-        'days' => \Drupal\booking_system\DaysSettingsInterface::DAYS
-      ]);
-      $entityConfig->save();
-    }
-    // dd($entityConfig->toArray());
-    // $entityConfig->save();
-
+    $entityConfig = $this->getEntityConfigId("auto", "conduite_auto");
     $form = $this->entityFormBuilder()->getForm($entityConfig, "edit", [
       'redirect_route' => 'bookingsystem_autoecole.config_resume',
       'booking_config_type_id' => $entityConfig->id()
     ]);
     return $form;
+  }
+
+  /**
+   * Retrieve the the right booking_config_type
+   * si lesroidelareno n'est pas installé alors il essaie de lire la configuration wb_horizon_public.config_auto_ecole
+   * si cette config est absente alors il la crée
+   */
+  protected function getEntityConfigId($type = "manuelle", $config_field = "conduite_manuelle") {
+    $entity_type_id = "booking_config_type";
+    $entityConfig = null;
+    if (\Drupal::moduleHandler()->moduleExists('lesroidelareno')) {
+      $entityConfig = $this->entityTypeManager()->getStorage($entity_type_id)->load(\Drupal\lesroidelareno\lesroidelareno::getCurrentPrefixDomain());
+    } else {
+      /**
+       *  @var \Drupal\Core\Config\Config $configs
+       */
+      $configs = \Drupal::service('config.factory')->getEditable('wb_horizon_public.config_auto_ecole');
+      if ($configs) {
+        $entityConfigid = $configs->get($config_field);
+        if ($entityConfigid)
+          $entityConfig = $this->entityTypeManager()->getStorage($entity_type_id)->load($entityConfigid);
+      }
+    }
+    if (!$entityConfig) {
+      $entityConfigId = 'conduite_' . $type;
+      $values = [
+        'label' => 'Configuration des creneaux boite ' . $type,
+        'days' => \Drupal\booking_system\DaysSettingsInterface::DAYS,
+        'id' => $entityConfigId
+      ];
+      $entityConfig = $this->entityTypeManager()->getStorage($entity_type_id)->create($values);
+      $entityConfig->save();
+      /**
+       *  we update the configuration
+       *  @var \Drupal\Core\Config\Config $configs
+       */
+      $configs = \Drupal::service('config.factory')->getEditable('wb_horizon_public.config_auto_ecole');
+      $configs->set($config_field, $entityConfigId);
+      $configs->save();
+    }
+    return $entityConfig;
   }
 }
