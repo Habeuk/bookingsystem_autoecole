@@ -20,8 +20,7 @@ class BookingsystemAutoecoleController extends ControllerBase {
       $build['content'] = [];
       return $build;
     }
-    $booking_config_type_id = $type_boite != "autommatique" ? $this->getEntityConfigId() : $this->getEntityConfigId("automatique", "conduite_auto");
-
+    $booking_config_type_id = $type_boite != "autommatique" ? $this->getEntityConfigId()->id() : $this->getEntityConfigId("automatique", "conduite_auto")->id();
     $urlCalendar = Url::fromRoute("bookingsystem_autoecole.app_load_config_calendar");
     $urlCreneaux = Url::fromRoute("bookingsystem_autoecole.app_load_creneaux", [
       'booking_config_type_id' => $booking_config_type_id,
@@ -83,8 +82,9 @@ class BookingsystemAutoecoleController extends ControllerBase {
   protected function getEntityConfigId($type = "manuelle", $config_field = "conduite_manuelle") {
     $entity_type_id = "booking_config_type";
     $entityConfig = null;
-    if (\Drupal::moduleHandler()->moduleExists('lesroidelareno')) {
-      $entityConfig = $this->entityTypeManager()->getStorage($entity_type_id)->load(\Drupal\lesroidelareno\lesroidelareno::getCurrentPrefixDomain());
+    $hasLesroidelareno = \Drupal::moduleHandler()->moduleExists('lesroidelareno');
+    if ($hasLesroidelareno) {
+      $entityConfig = $this->entityTypeManager()->getStorage($entity_type_id)->load(\Drupal\lesroidelareno\lesroidelareno::getCurrentPrefixDomain() . ($type == "auto" ? "auto" : ""));
     } else {
       /**
        *  @var \Drupal\Core\Config\Config $configs
@@ -97,7 +97,11 @@ class BookingsystemAutoecoleController extends ControllerBase {
       }
     }
     if (!$entityConfig) {
-      $entityConfigId = 'conduite_' . $type;
+      if ($hasLesroidelareno) {
+        $entityConfigId = \Drupal\lesroidelareno\lesroidelareno::getCurrentPrefixDomain() . ($type == "auto" ? "auto" : "");
+      } else {
+        $entityConfigId = 'conduite_' . $type;
+      }
       $values = [
         'label' => 'Configuration des creneaux boite ' . $type,
         'days' => \Drupal\booking_system\DaysSettingsInterface::DAYS,
@@ -105,13 +109,15 @@ class BookingsystemAutoecoleController extends ControllerBase {
       ];
       $entityConfig = $this->entityTypeManager()->getStorage($entity_type_id)->create($values);
       $entityConfig->save();
-      /**
-       *  we update the configuration
-       *  @var \Drupal\Core\Config\Config $configs
-       */
-      $configs = \Drupal::service('config.factory')->getEditable('wb_horizon_public.config_auto_ecole');
-      $configs->set($config_field, $entityConfigId);
-      $configs->save();
+      if (!$hasLesroidelareno) {
+        /**
+         *  we update the configuration
+         *  @var \Drupal\Core\Config\Config $configs
+         */
+        $configs = \Drupal::service('config.factory')->getEditable('wb_horizon_public.config_auto_ecole');
+        $configs->set($config_field, $entityConfigId);
+        $configs->save();
+      }
     }
     return $entityConfig;
   }
