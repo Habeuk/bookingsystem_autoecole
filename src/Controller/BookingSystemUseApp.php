@@ -46,13 +46,16 @@ class BookingSystemUseApp extends ControllerBase {
    */
   public function loadConfigCalandar(Request $Request) {
     try {
-      $booking_config_type_id = 'auto';
+      $booking_config_type_id = '';
       /**
        *
        * @var string $booking_config_type_id
        */
       if (\Drupal::moduleHandler()->moduleExists('lesroidelareno')) {
         $booking_config_type_id = \Drupal\lesroidelareno\lesroidelareno::getCurrentPrefixDomain();
+      } else {
+        $configs = $this->config("wb_horizon_public.config_auto_ecole");
+        $booking_config_type_id = $configs->get("conduite_auto");
       }
       $configs = $this->BookingMangerDate->loadBookingConfig($booking_config_type_id);
       return HttpResponse::response($configs);
@@ -85,6 +88,11 @@ class BookingSystemUseApp extends ControllerBase {
    */
   public function loadConfisCreneaux($booking_config_type_id, $date, $type_boite) {
     try {
+      if (!(\Drupal::moduleHandler()->moduleExists('lesroidelareno'))) {
+        $configEntry = "conduite_" . ($type_boite == "manuelle" ? "manuelle" : "auto");
+        $configs = $this->config("wb_horizon_public.config_auto_ecole");
+        $booking_config_type_id = $configs->get($configEntry);
+      }
       $this->ManagerCreneaux->type_boite = $type_boite;
       $configs = $this->ManagerCreneaux->loadCreneaux($booking_config_type_id, $date);
       return HttpResponse::response($configs);
@@ -102,6 +110,11 @@ class BookingSystemUseApp extends ControllerBase {
    */
   public function SaveReservation(Request $Request, string $booking_config_type_id, $type_boite) {
     try {
+      if (!(\Drupal::moduleHandler()->moduleExists('lesroidelareno'))) {
+        $configEntry = "conduite_" . ($type_boite == "manuelle" ? "manuelle" : "auto");
+        $configs = $this->config("wb_horizon_public.config_auto_ecole");
+        $booking_config_type_id = $configs->get($configEntry);
+      }
       $values = Json::decode($Request->getContent());
       $this->BookingMangerDate->type_boite = $type_boite;
       $configs = $this->BookingMangerDate->saveCreneaux($booking_config_type_id, $values);
