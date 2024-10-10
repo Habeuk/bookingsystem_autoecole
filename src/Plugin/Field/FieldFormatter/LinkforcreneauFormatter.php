@@ -28,8 +28,8 @@ class LinkforcreneauFormatter extends FormatterBase {
   public static function defaultSettings() {
     return [
       'route' => 'bookingsystem_autoecole.page.app',
-      'empty_hours' => "Vous n'avez plus d'heure disponible, vous devez acheter un forfait ou des heures supplementaires !!!",
-      'no_login' => 'Vous devez etre connecter afin de pouvoir effectuer des reservations'
+      'empty_hours' => t("You no longer have any hours available, you must purchase a package or additional hours!!!"),
+      'no_login' => t('You must be logged in to make a reservation.')
     ] + parent::defaultSettings();
   }
   
@@ -41,7 +41,7 @@ class LinkforcreneauFormatter extends FormatterBase {
     $elements['route'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Route name'),
-      '#description' => "Ce lien est utilisé pour renvoyer l'utilisateur vers la page de connection",
+      '#description' => t("This link is used to redirect the user to the login page"),
       '#default_value' => $this->getSetting('route')
     ];
     return $elements;
@@ -250,5 +250,4 @@ class LinkforcreneauFormatter extends FormatterBase {
     }
     return $element;
   }
-  
 }

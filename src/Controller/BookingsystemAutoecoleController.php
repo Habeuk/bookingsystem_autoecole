@@ -9,14 +9,14 @@ use Drupal\Core\Url;
  * Returns responses for bookingsystem_autoecole routes.
  */
 class BookingsystemAutoecoleController extends ControllerBase {
-
+  
   /**
    * Builds the response to showing the Vue-js app.
    * On definit les urls pour l'initialisation de l'application.
    */
   public function build($type_boite) {
     if (!$this->currentUser()->id()) {
-      $this->messenger()->addWarning('Vous devez etre connecter afin de pouvoir effectuer une reservation');
+      $this->messenger()->addWarning($this->t('You must be logged in to make a reservation'));
       $build['content'] = [];
       return $build;
     }
@@ -47,7 +47,7 @@ class BookingsystemAutoecoleController extends ControllerBase {
     $build['content']['#attached']['library'][] = 'booking_system/booking_system_app2';
     return $build;
   }
-
+  
   /**
    * Permet de generer et de configurer RDV par domaine pour le type de
    * transmission manuel.
@@ -60,7 +60,7 @@ class BookingsystemAutoecoleController extends ControllerBase {
     ]);
     return $form;
   }
-
+  
   /**
    * Permet de generer et de configurer RDV par domaine pour les boites
    * Automatique.
@@ -73,10 +73,11 @@ class BookingsystemAutoecoleController extends ControllerBase {
     ]);
     return $form;
   }
-
+  
   /**
    * Retrieve the the right booking_config_type
-   * si lesroidelareno n'est pas installé alors il essaie de lire la configuration wb_horizon_public.config_auto_ecole
+   * si lesroidelareno n'est pas installé alors il essaie de lire la
+   * configuration wb_horizon_public.config_auto_ecole
    * si cette config est absente alors il la crée
    */
   protected function getEntityConfigId($type = "manuelle", $config_field = "conduite_manuelle") {
@@ -85,9 +86,11 @@ class BookingsystemAutoecoleController extends ControllerBase {
     $hasLesroidelareno = \Drupal::moduleHandler()->moduleExists('lesroidelareno');
     if ($hasLesroidelareno) {
       $entityConfig = $this->entityTypeManager()->getStorage($entity_type_id)->load(\Drupal\lesroidelareno\lesroidelareno::getCurrentPrefixDomain() . ($type == "auto" ? "auto" : ""));
-    } else {
+    }
+    else {
       /**
-       *  @var \Drupal\Core\Config\Config $configs
+       *
+       * @var \Drupal\Core\Config\Config $configs
        */
       $configs = \Drupal::service('config.factory')->getEditable('wb_horizon_public.config_auto_ecole');
       if ($configs) {
@@ -99,11 +102,12 @@ class BookingsystemAutoecoleController extends ControllerBase {
     if (!$entityConfig) {
       if ($hasLesroidelareno) {
         $entityConfigId = \Drupal\lesroidelareno\lesroidelareno::getCurrentPrefixDomain() . ($type == "auto" ? "auto" : "");
-      } else {
+      }
+      else {
         $entityConfigId = 'conduite_' . $type;
       }
       $values = [
-        'label' => 'Configuration des creneaux boite ' . $type,
+        'label' => t('Box slot configuration ') . $type,
         'days' => \Drupal\booking_system\DaysSettingsInterface::DAYS,
         'id' => $entityConfigId
       ];
@@ -111,8 +115,9 @@ class BookingsystemAutoecoleController extends ControllerBase {
       $entityConfig->save();
       if (!$hasLesroidelareno) {
         /**
-         *  we update the configuration
-         *  @var \Drupal\Core\Config\Config $configs
+         * we update the configuration
+         *
+         * @var \Drupal\Core\Config\Config $configs
          */
         $configs = \Drupal::service('config.factory')->getEditable('wb_horizon_public.config_auto_ecole');
         $configs->set($config_field, $entityConfigId);
